@@ -1,8 +1,8 @@
 import ReactDOM from 'react-dom';
 import './index.css';
-import { App } from './App';
+import { AssistanceForm } from './components/AssistanceForm';
 
 ReactDOM.render(
-  <App />,
+  <AssistanceForm />,
   document.getElementById('root')
 );

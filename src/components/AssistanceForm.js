@@ -1,47 +1,79 @@
-import { Button, Container, Grid, TextField } from '@mui/material'
+import { Autocomplete, Button, Container, Grid, TextField } from '@mui/material'
 import { Box } from '@mui/system'
-import React from 'react'
+import React, { useState } from 'react'
 import './AssistanceForm.css'
+import { depts, representatives, getRepresentativesFromDept } from './AssistanceList'
 
 export const AssistanceForm = () => {
+
+	const [selectedDept, setSelectedDept] = useState(null);
+	const [representatives, setRepresentative] = useState(null);
+	const [selectedRepresentative, setSelectedRepresentative] = useState(null);
+
+	const handleDeptChange = (value) => {
+		setSelectedDept(value);
+		if (value) {
+			setRepresentative(getRepresentativesFromDept(value.id));
+		}
+	};
+
+	const handleRepChange = (value) => {
+		setSelectedRepresentative(value);
+	}
+
 	return (
-		<Grid container className='form-back'>
-			<Box className=''>
-				<Grid container className='form-header'>
-					<Grid item xs={12}>
-						<h1>Form title</h1>
-					</Grid>
+		<Container className='form'>
+			<Box className='form-header'>
+				<h3>Registro de <span>asistencia</span></h3>
+			</Box>
+			<Grid container className='form-title'>
+				<Grid item xs={12} md={12} className='form-info'>
+					<h4>Registre su asistencia seleccionando su dependencia y nombre.</h4>
 				</Grid>
 				<Grid container className='form-body'>
-					<Grid item xs={12}>
-						<TextField
-							id='name'
-							label='Name'
-							placeholder='Enter your name'
-							margin='normal'
-							fullWidth
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<TextField
-							id='email'
-							label='Email'
-							placeholder='Enter your email'
-							margin='normal'
-							fullWidth
-						/>
-					</Grid>
-					<Grid item xs={12}>
-						<Button
-							variant='contained'
-							color='primary'
-							fullWidth
-						>
-							Submit
-						</Button>
-					</Grid>
+					<form>
+						<Grid item xs={12} md={12} className='form-options'>
+							<Autocomplete
+								id="depts"
+								options={depts}
+								className='form-selector animate__animated animate__fadeInDown'
+								fullWidth
+								size='small'
+								renderInput={params => (
+									<TextField {...params} label="Departamento" variant="outlined" fullWidth size='small' className='animate__animated animate__fadeInDown' />
+								)}
+								getOptionLabel={option => option.name}
+								value={selectedDept}
+								onChange={(e, newDept) => handleDeptChange(newDept)}
+							/>
+							{
+								representatives &&
+								<Autocomplete
+									id="reps"
+									options={representatives}
+									className='form-selector animate__animated animate__fadeInDown'
+									fullWidth
+									size='small'
+									renderInput={params => (
+										<TextField {...params} label="Representantes del departamento" variant="outlined" fullWidth />
+									)}
+									getOptionLabel={option => option.name}
+									value={selectedRepresentative}
+									onChange={(e, newRep) => handleRepChange(newRep)}
+								/>
+							}
+							<Button
+								variant='contained'
+								className='form-button'
+								buttonType='submit'
+								fullWidth
+							>
+								Registrar
+							</Button>
+						</Grid>
+					</form>
 				</Grid>
-			</Box>
-		</Grid>
+			</Grid>
+		</Container>
 	)
 }
