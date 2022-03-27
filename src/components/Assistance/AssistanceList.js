@@ -71,3 +71,8 @@ export const representatives = [
 export const getRepresentativesFromDept = (deptId) => {
     return representatives.filter(rep => rep.deptId === deptId);
 }
+
+export const getRepresentativeThatIsOnReunion = (deptId) => {
+    const [{ name }] = representatives.filter(rep => rep.deptId === deptId && rep.assist === true)
+    return name;
+}

@@ -2,7 +2,7 @@ import { Alert, AlertTitle, Autocomplete, Button, Container, Grid, TextField } f
 import { Box } from '@mui/system'
 import React, { useState } from 'react'
 import './AssistanceForm.css'
-import { depts, representatives, getRepresentativesFromDept } from './AssistanceList'
+import { depts, representatives, getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
 
 export const AssistanceForm = () => {
 
@@ -10,13 +10,14 @@ export const AssistanceForm = () => {
 	const [representatives, setRepresentative] = useState(null);
 	const [selectedRepresentative, setSelectedRepresentative] = useState(null);
 	const [assist, setAssist] = useState(false);
+	const [name, setName] = useState('');
 
 	const handleDeptChange = (value) => {
-		console.log('Happening');
 		setSelectedDept(value);
 
 		if (value) {
 			if (value.hasRepresentative) {
+				setName(getRepresentativeThatIsOnReunion(value.id));
 				setAssist(true);
 			} else {
 				setAssist(false);
@@ -29,6 +30,11 @@ export const AssistanceForm = () => {
 		setSelectedRepresentative(value);
 	}
 
+	const handleRetirement = () => {
+		// TODO PATCH TO RESET ASSIST STATE
+		setAssist(false);
+		setRepresentative(getRepresentativesFromDept(selectedDept.id));
+	}
 	return (
 		<Container className='form'>
 			<Box className='form-header'>
@@ -73,8 +79,10 @@ export const AssistanceForm = () => {
 								assist &&
 								(
 									<Alert severity='info' className='animate__animated animate__headShake'>
-										<AlertTitle><b>Nombre Apellido</b> está en la reunión actualmente.</AlertTitle>
-										Si desea entrar a la reunión, solicite a <b>Nombre</b> que se retire.
+										<AlertTitle><b>{name}</b> está en la reunión actualmente.</AlertTitle>
+										Si desea entrar a la reunión, solicite a <b>{name}</b> que se retire.
+										<br /> <br />
+										<Button color='secondary' variant='outlined' size='small' onClick={handleRetirement}>He solicitado su retiro</Button>
 									</Alert>
 								)
 							}
