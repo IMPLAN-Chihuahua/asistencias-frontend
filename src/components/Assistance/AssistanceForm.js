@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Container, Grid, TextField } from '@mui/material'
+import { Alert, AlertTitle, Autocomplete, Button, Container, Grid, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useState } from 'react'
 import './AssistanceForm.css'
@@ -9,11 +9,19 @@ export const AssistanceForm = () => {
 	const [selectedDept, setSelectedDept] = useState(null);
 	const [representatives, setRepresentative] = useState(null);
 	const [selectedRepresentative, setSelectedRepresentative] = useState(null);
+	const [assist, setAssist] = useState(false);
 
 	const handleDeptChange = (value) => {
+		console.log('Happening');
 		setSelectedDept(value);
+
 		if (value) {
-			setRepresentative(getRepresentativesFromDept(value.id));
+			if (value.hasRepresentative) {
+				setAssist(true);
+			} else {
+				setAssist(false);
+				setRepresentative(getRepresentativesFromDept(value.id));
+			}
 		}
 	};
 
@@ -47,7 +55,7 @@ export const AssistanceForm = () => {
 								onChange={(e, newDept) => handleDeptChange(newDept)}
 							/>
 							{
-								representatives &&
+								representatives && !assist &&
 								<Autocomplete
 									id="reps"
 									options={representatives}
@@ -61,11 +69,19 @@ export const AssistanceForm = () => {
 									value={selectedRepresentative}
 									onChange={(e, newRep) => handleRepChange(newRep)}
 								/>
+								||
+								assist &&
+								(
+									<Alert severity='info' className='animate__animated animate__headShake'>
+										<AlertTitle><b>Nombre Apellido</b> está en la reunión actualmente.</AlertTitle>
+										Si desea entrar a la reunión, solicite a <b>Nombre</b> que se retire.
+									</Alert>
+								)
 							}
+							<br />
 							<Button
 								variant='contained'
 								className='form-button'
-								buttonType='submit'
 								fullWidth
 							>
 								Registrar

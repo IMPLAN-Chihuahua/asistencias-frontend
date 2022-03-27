@@ -2,14 +2,17 @@ export const depts = [
     {
         id: 1,
         name: 'Departamento de Informática',
+        hasRepresentative: true,
     },
     {
         id: 2,
         name: 'Departamento de Recursos Humanos',
+        hasRepresentative: false,
     },
     {
         id: 3,
         name: 'Departamento de Contabilidad',
+        hasRepresentative: false,
     },
 ];
 
