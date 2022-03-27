@@ -1,0 +1,11 @@
+.form-back {
+    display: flex;
+    justify-content: center;    
+    align-items: center;
+    flex-direction: row;
+    background-color: rgba(184, 135, 11, 0.74);
+}
+
+.form-body {
+    background-color: red;   
+}
