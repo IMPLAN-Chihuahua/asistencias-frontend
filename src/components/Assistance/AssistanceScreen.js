@@ -7,10 +7,34 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import PersonIcon from '@mui/icons-material/Person';
+import { getRepresentativesThatAreOnReunion } from './AssistanceList';
+import { Button, Container } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 
 export default function AssistanceScreen() {
+
+    const reps = getRepresentativesThatAreOnReunion();
+
     return (
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <Container className='animate__animated animate__fadeIn'>
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                {reps.map((rep, index) => (
+                    <Person {...rep} key={index} />
+                ))}
+            </List>
+            <br />
+            <NavLink to="/">
+                <Button variant='outlined' color='secondary'>
+                    Go back
+                </Button>
+            </NavLink>
+        </Container>
+    );
+}
+
+export const Person = ({ name, date, deptName }) => {
+    return (
+        <>
             <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                     <Avatar>
@@ -18,7 +42,7 @@ export default function AssistanceScreen() {
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                    primary="Johnny Depp"
+                    primary={name}
                     secondary={
                         <React.Fragment>
                             <Typography
@@ -27,62 +51,14 @@ export default function AssistanceScreen() {
                                 variant="body2"
                                 color="text.primary"
                             >
-                                Activo en la reunión desde
-                                <br />
+                                {`Representante de: ${deptName}. Activo en la reunión desde`}
                             </Typography>
-                            {"día 99 de Enero de 2020 a las 12:00 PM"}
+                            {` — ${date}`}
                         </React.Fragment>
                     }
                 />
             </ListItem>
             <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                    <Avatar>
-                        <PersonIcon />
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                    primary="Summer BBQ"
-                    secondary={
-                        <React.Fragment>
-                            <Typography
-                                sx={{ display: 'inline' }}
-                                component="span"
-                                variant="body2"
-                                color="text.primary"
-                            >
-                                to Scott, Alex, Jennifer
-                            </Typography>
-                            {" — Wish I could come, but I'm out of town this…"}
-                        </React.Fragment>
-                    }
-                />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                    <Avatar>
-                        <PersonIcon />
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                    primary="Oui Oui"
-                    secondary={
-                        <React.Fragment>
-                            <Typography
-                                sx={{ display: 'inline' }}
-                                component="span"
-                                variant="body2"
-                                color="text.primary"
-                            >
-                                Sandra Adams
-                            </Typography>
-                            {' — Do you have Paris recommendations? Have you ever…'}
-                        </React.Fragment>
-                    }
-                />
-            </ListItem>
-        </List>
+        </>
     );
 }

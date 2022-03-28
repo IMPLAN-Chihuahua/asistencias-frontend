@@ -1,6 +1,7 @@
-import { Alert, AlertTitle, Autocomplete, Button, Container, Grid, TextField } from '@mui/material'
+import { Alert, AlertTitle, Autocomplete, Button, Container, Grid, Link, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import './AssistanceForm.css'
 import { depts, representatives, getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
 
@@ -37,7 +38,7 @@ export const AssistanceForm = () => {
 		setRepresentative(getRepresentativesFromDept(selectedDept.id));
 	}
 	return (
-		<Container className='form'>
+		<Container className='form animate__animated animate__fadeIn'>
 			<Box className='form-header'>
 				<h3>Registro de <span>asistencia</span></h3>
 			</Box>
@@ -95,6 +96,16 @@ export const AssistanceForm = () => {
 							>
 								Registrar
 							</Button>
+							<NavLink to='/list' className='form-link'>
+								<Button
+									variant='contained'
+									className='form-button'
+									fullWidth
+								>
+									Ver lista
+								</Button>
+							</NavLink>
+
 						</Grid>
 					</form>
 				</Grid>
