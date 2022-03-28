@@ -58,16 +58,17 @@ export const AssistanceForm = () => {
 
 	return (
 		<Container className='form animate__animated animate__fadeIn'>
-			<Box className='form-header'>
-				<h3>Registrdo de <span style={{backgroundColor:'black'}}>asistencia</span></h3>
-			</Box>
+			{/* <Box className='form-header'>
+			</Box> */}
 			<Grid container className='form-title'>
 				<Grid item xs={12} md={12} className='form-info'>
-					<h4>Registre su asistencia seleccionando su dependencia y nombre.</h4>
+					<h2>Registro de asistencia</h2>
+					<hr/>
+					<h3 style={{color:'rgb(0,0,0,0.7)'}}>Registre su asistencia seleccionando su dependencia y nombre.</h3>
 				</Grid>
-				<Grid container className='form-body'>
-					<form>
+					<Grid item container className='form-body'>
 						<Grid item xs={12} md={12} className='form-options'>
+					<form>
 							<Autocomplete
 								id="depts"
 								options={depts}
@@ -108,25 +109,26 @@ export const AssistanceForm = () => {
 								)
 							}
 							<br />
+							<Box className='af-options'>
+
 							<Button
 								variant='contained'
 								className='form-button'
-								fullWidth
-							>
+							
+								>
 								Registrar
 							</Button>
+							<Box className='af-href'>
 							<NavLink to='/list' className='form-link'>
-								<Button
-									variant='contained'
-									className='form-button'
-									fullWidth
-								>
+								<button className='af-href--button'>
 									Ver lista
-								</Button>
+								</button>
 							</NavLink>
+							</Box>
 
+								</Box>
+						</form>
 						</Grid>
-					</form>
 				</Grid>
 			</Grid>
 		</Container>
