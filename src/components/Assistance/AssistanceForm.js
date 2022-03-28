@@ -59,7 +59,7 @@ export const AssistanceForm = () => {
 	return (
 		<Container className='form animate__animated animate__fadeIn'>
 			<Box className='form-header'>
-				<h3>Registro de <span>asistencia</span></h3>
+				<h3>Registrdo de <span style={{backgroundColor:'black'}}>asistencia</span></h3>
 			</Box>
 			<Grid container className='form-title'>
 				<Grid item xs={12} md={12} className='form-info'>
