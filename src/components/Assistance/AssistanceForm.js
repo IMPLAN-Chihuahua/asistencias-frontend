@@ -3,8 +3,10 @@ import { Box } from '@mui/system'
 import React, { useEffect, useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { getDependencias, getRepresentantesFromDependencia } from '../../services/dependencias'
+import { joinRepresentante } from '../../services/representantes'
 import './Assistance.css'
 import { getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
+import { StatusModal } from '../StatusModal/StatusModal'
 
 const deptPromise = getDependencias().then(({ data }) => data);
 
@@ -16,6 +18,9 @@ export const AssistanceForm = () => {
 	const [assist, setAssist] = useState(false);
 	const [name, setName] = useState('');
 	const [dependencias, setDependencias] = useState(null);
+
+	const [openModal, setOpenModal] = useState(false);
+	const [status, setStatus] = useState(false);
 
 	useEffect(() => {
 		deptPromise
@@ -55,6 +60,18 @@ export const AssistanceForm = () => {
 		setAssist(false);
 		setRepresentative(getRepresentativesFromDept(selectedDept.id));
 	}
+
+	const handleRegister = () => {
+		if (selectedDept && selectedRepresentative) {
+			joinRepresentante(selectedRepresentative.id)
+				.then(setOpenModal(true), setStatus(true))
+				.catch(err => console.error(err));
+		} else {
+			setStatus(false);
+			alert('Selecciona un representante.');
+		}
+
+	};
 
 	return (
 		<Container className='form animate__animated animate__fadeIn'>
@@ -112,9 +129,11 @@ export const AssistanceForm = () => {
 								variant='contained'
 								className='form-button'
 								fullWidth
+								onClick={handleRegister}
 							>
 								Registrar
 							</Button>
+							<StatusModal open={openModal} setOpenModal={setOpenModal} status={status} />
 							<NavLink to='/list' className='form-link'>
 								<Button
 									variant='contained'
