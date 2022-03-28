@@ -8,26 +8,57 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import PersonIcon from '@mui/icons-material/Person';
 import { getRepresentativesThatAreOnReunion } from './AssistanceList';
-import { Button, Container } from '@mui/material';
+import { Box, Button, Container, Input } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import debounce from 'lodash.debounce';
+
+
+import './Assistance.css'
 
 export default function AssistanceScreen() {
 
-    const reps = getRepresentativesThatAreOnReunion();
+    const [reps, setReps] = React.useState(getRepresentativesThatAreOnReunion())
+    const [filter, setFilter] = React.useState("")
+    
+    React.useEffect(() => {
+        if(filter == ""){
+            setReps(getRepresentativesThatAreOnReunion());
+        }else{
+            setReps(reps.filter(reps => reps.name.toUpperCase().includes(filter.toUpperCase())));
+        }
+    }, [filter])
+    
+
+    const handleInput = (e) => {
+        setFilter(e.target.value)
+    }
+    
+    const debounceHandleInput = React.useMemo( () => 
+        debounce(handleInput,300),[]);
+    
+
 
     return (
         <Container className='animate__animated animate__fadeIn'>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                {reps.map((rep, index) => (
-                    <Person {...rep} key={index} />
-                ))}
-            </List>
-            <br />
+            <Box className='as-content--search'>
             <NavLink to="/">
-                <Button variant='outlined' color='secondary'>
-                    Go back
-                </Button>
-            </NavLink>
+                <button className='as-btn--search'>
+                    <ArrowBackIcon/>
+                </button>
+                </NavLink>
+            
+            <Input className='as-input--search' placeholder='Buscar...' onChange={debounceHandleInput}>
+            </Input>
+            </Box>
+            
+            <List className='as-list'>
+                {(reps.length > 0)
+                ?
+                reps.map((rep, index) => (<Person {...rep} key={index} />))
+                :<p style={{color:'gray', textAlign:'center'}}>No se encontro información</p>
+                }
+            </List>
         </Container>
     );
 }
@@ -35,7 +66,7 @@ export default function AssistanceScreen() {
 export const Person = ({ name, date, deptName }) => {
     return (
         <>
-            <ListItem alignItems="flex-start">
+            <ListItem alignItems="flex-start" className='as-listItem'>
                 <ListItemAvatar>
                     <Avatar>
                         <PersonIcon />

@@ -15,7 +15,7 @@
 }
 
 .form-info {
-    background-color: #FCC373;
+    /* background-color: #FCC373; */
     text-align: center;
 }
 
@@ -42,4 +42,39 @@ form {
     background: #FBB24B !important;
     color: black !important;
     font-weight: bold !important;
+}
+
+.as-list{
+    width: 100%;
+    background-color: white;
+}
+.as-content--search{
+    margin: 50px 0px 50px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.as-input--search{
+    width: 100%;
+    margin-left: 30px;
+}
+.as-btn--search{
+    background-color: #201f22;
+    color: white;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+}
+.as-btn--search:hover{
+    background-color: #e6991e;
+    color: white;
+}
+.as-listItem:hover{
+    background-color: rgb(116,189,218,0.2);
 }
