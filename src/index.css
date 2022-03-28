@@ -15,3 +15,15 @@ body {
     margin-right: auto;
     padding: 1em;
 }
+
+.nav-bar{
+    background: black;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+img {
+    width: 100%;
+}

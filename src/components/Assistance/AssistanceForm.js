@@ -13,6 +13,7 @@ export const AssistanceForm = () => {
 	const [name, setName] = useState('');
 
 	const handleDeptChange = (value) => {
+		setSelectedRepresentative(null);
 		setSelectedDept(value);
 
 		if (value) {
