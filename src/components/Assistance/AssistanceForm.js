@@ -33,10 +33,10 @@ export const AssistanceForm = () => {
 	}
 
 	const handleRetirement = () => {
-		// TODO PATCH TO RESET ASSIST STATE
 		setAssist(false);
 		setRepresentative(getRepresentativesFromDept(selectedDept.id));
 	}
+
 	return (
 		<Container className='form animate__animated animate__fadeIn'>
 			<Box className='form-header'>
