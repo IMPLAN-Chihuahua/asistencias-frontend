@@ -2,7 +2,7 @@ import { Alert, AlertTitle, Autocomplete, Button, Container, Grid, Link, TextFie
 import { Box } from '@mui/system'
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import './AssistanceForm.css'
+import './Assistance.css'
 import { depts, representatives, getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
 
 export const AssistanceForm = () => {
