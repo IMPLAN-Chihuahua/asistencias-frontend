@@ -18,6 +18,7 @@ import './Assistance.css'
 
 export default function AssistanceScreen() {
 
+    const allReps = getRepresentativesThatAreOnReunion();
     const [reps, setReps] = React.useState(getRepresentativesThatAreOnReunion())
     const [filter, setFilter] = React.useState("")
     
@@ -25,7 +26,7 @@ export default function AssistanceScreen() {
         if(filter == ""){
             setReps(getRepresentativesThatAreOnReunion());
         }else{
-            setReps(reps.filter(reps => reps.name.toUpperCase().includes(filter.toUpperCase())));
+            setReps(allReps.filter(reps => reps.name.toUpperCase().includes(filter.toUpperCase())));
         }
     }, [filter])
     
