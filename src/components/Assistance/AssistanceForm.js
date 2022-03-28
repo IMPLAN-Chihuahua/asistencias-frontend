@@ -1,29 +1,48 @@
 import { Alert, AlertTitle, Autocomplete, Button, Container, Grid, Link, TextField } from '@mui/material'
 import { Box } from '@mui/system'
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { getDependencias, getRepresentantesFromDependencia } from '../../services/dependencias'
 import './Assistance.css'
-import { depts, representatives, getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
+import { getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
+
+const deptPromise = getDependencias().then(({ data }) => data);
 
 export const AssistanceForm = () => {
-
+	let depts = [{}];
 	const [selectedDept, setSelectedDept] = useState(null);
 	const [representatives, setRepresentative] = useState(null);
 	const [selectedRepresentative, setSelectedRepresentative] = useState(null);
 	const [assist, setAssist] = useState(false);
 	const [name, setName] = useState('');
+	const [dependencias, setDependencias] = useState(null);
+
+	useEffect(() => {
+		deptPromise
+			.then(setDependencias)
+			.catch(err => console.error(err))
+	}, []);
+
+	if (dependencias) {
+		depts = dependencias;
+	}
+	useEffect(() => {
+		if (selectedDept) {
+			getRepresentantesFromDependencia(selectedDept.id)
+				.then(({ data }) => setRepresentative(data))
+				.catch(err => console.error(err));
+		}
+	}, [selectedDept]);
 
 	const handleDeptChange = (value) => {
 		setSelectedRepresentative(null);
 		setSelectedDept(value);
-
 		if (value) {
 			if (value.hasRepresentative) {
 				setName(getRepresentativeThatIsOnReunion(value.id));
 				setAssist(true);
 			} else {
 				setAssist(false);
-				setRepresentative(getRepresentativesFromDept(value.id));
 			}
 		}
 	};
