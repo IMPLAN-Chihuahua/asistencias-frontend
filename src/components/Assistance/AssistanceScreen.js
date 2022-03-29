@@ -21,6 +21,7 @@ import { getRepresentantesThatCheckedIn } from '../../services/representantes';
 export default function AssistanceScreen() {
     const repPromise = getRepresentantesThatCheckedIn().then(({ data }) => data);
 
+    const allReps = getRepresentativesThatAreOnReunion();
     const [reps, setReps] = React.useState(getRepresentativesThatAreOnReunion())
     const [filter, setFilter] = React.useState("")
 

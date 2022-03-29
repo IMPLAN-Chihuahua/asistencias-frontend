@@ -75,16 +75,17 @@ export const AssistanceForm = () => {
 
 	return (
 		<Container className='form animate__animated animate__fadeIn'>
-			<Box className='form-header'>
-				<h3>Registro de <span>asistencia</span></h3>
-			</Box>
+			{/* <Box className='form-header'>
+			</Box> */}
 			<Grid container className='form-title'>
 				<Grid item xs={12} md={12} className='form-info'>
-					<h4>Registre su asistencia seleccionando su dependencia y nombre.</h4>
+					<h2>Registro de asistencia</h2>
+					<hr />
+					<h3 style={{ color: 'rgb(0,0,0,0.7)' }}>Registre su asistencia seleccionando su dependencia y nombre.</h3>
 				</Grid>
-				<Grid container className='form-body'>
-					<form>
-						<Grid item xs={12} md={12} className='form-options'>
+				<Grid item container className='form-body'>
+					<Grid item xs={12} md={12} className='form-options'>
+						<form>
 							<Autocomplete
 								id="depts"
 								options={depts}
@@ -125,29 +126,29 @@ export const AssistanceForm = () => {
 								)
 							}
 							<br />
-							<Button
-								variant='contained'
-								className='form-button'
-								fullWidth
-								onClick={handleRegister}
-							>
-								Registrar
-							</Button>
-							<StatusModal open={openModal} setOpenModal={setOpenModal} status={status} />
-							<NavLink to='/list' className='form-link'>
+							<Box className='af-options'>
+
 								<Button
 									variant='contained'
 									className='form-button'
-									fullWidth
+									onClick={handleRegister}
 								>
-									Ver lista
+									Registrar
 								</Button>
-							</NavLink>
+								<StatusModal open={openModal} setOpenModal={setOpenModal} status={status} />
+								<Box className='af-href'>
+									<NavLink to='/list' className='form-link'>
+										<button className='af-href--button'>
+											Ver lista
+										</button>
+									</NavLink>
+								</Box>
 
-						</Grid>
-					</form>
+							</Box>
+						</form>
+					</Grid>
 				</Grid>
 			</Grid>
-		</Container>
+		</Container >
 	)
 }
