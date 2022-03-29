@@ -68,7 +68,7 @@ export const AssistanceForm = () => {
 				.catch(err => console.error(err));
 		} else {
 			setStatus(false);
-			alert('Selecciona un representante.');
+			setOpenModal(true);
 		}
 
 	};

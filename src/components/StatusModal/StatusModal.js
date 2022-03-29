@@ -12,7 +12,8 @@ export const StatusModal = ({ open, setOpenModal, status }) => {
                     <Modal open={open} onClose={handleClose}>
                         <>
                             <Box className='modal'>
-                                <Typography>La asistencia ha sido registrada, será redireccionado al listado de personas en la reunión.</Typography>
+                                <Typography className="modal-text">La asistencia ha sido registrada, será redireccionado al listado de personas en la reunión.</Typography>
+                                <br />
                                 <Link to='/list'>
                                     <Button>Close</Button>
                                 </Link>
@@ -24,8 +25,9 @@ export const StatusModal = ({ open, setOpenModal, status }) => {
                     <Modal open={open} onClose={handleClose}>
                         <>
                             <Box className='modal'>
-                                <Typography>Error</Typography>
-                                <Button>Close</Button>
+                                <Typography className="modal-text">Por favor, seleccione a algún representante.</Typography>
+                                <br />
+                                <Button onClick={handleClose} variant="outlined">Close</Button>
                             </Box>
                         </>
                     </Modal>

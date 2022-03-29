@@ -74,8 +74,9 @@ export default function AssistanceScreen() {
     );
 }
 
-export const Person = ({ name, updatedAt, dependenciaName }) => {
-    const d = new Date(updatedAt);
+export const Person = ({ name, updatedAt, dependenciaName, leftAt }) => {
+    const date = new Date(updatedAt);
+    const dateLeft = new Date(leftAt);
     return (
         <>
             <ListItem alignItems="flex-start" className='as-listItem'>
@@ -97,8 +98,10 @@ export const Person = ({ name, updatedAt, dependenciaName }) => {
                                 {`En representación de: ${dependenciaName}. `}
                                 <br />
                             </Typography>
-                            {` Entrada — ${d.toLocaleTimeString()} -`}
-                            {` Salida — ${d.toLocaleTimeString()}`}
+                            {` Entrada — ${date.toLocaleTimeString()}`}
+                            {
+                                leftAt ? `- Salida — ${dateLeft.toLocaleTimeString()}` : ' '
+                            }
                         </React.Fragment>
                     }
                 />
