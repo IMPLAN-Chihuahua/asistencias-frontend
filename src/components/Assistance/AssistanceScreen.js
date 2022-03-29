@@ -15,56 +15,69 @@ import debounce from 'lodash.debounce';
 
 
 import './Assistance.css'
+import { getRepresentantesThatCheckedIn } from '../../services/representantes';
+
 
 export default function AssistanceScreen() {
+    const repPromise = getRepresentantesThatCheckedIn().then(({ data }) => data);
 
     const allReps = getRepresentativesThatAreOnReunion();
     const [reps, setReps] = React.useState(getRepresentativesThatAreOnReunion())
     const [filter, setFilter] = React.useState("")
-    
+
     React.useEffect(() => {
-        if(filter == ""){
-            setReps(getRepresentativesThatAreOnReunion());
-        }else{
-            setReps(allReps.filter(reps => reps.name.toUpperCase().includes(filter.toUpperCase())));
+        repPromise
+            .then(setReps)
+            .catch(err => console.error(err))
+    }, []);
+
+    React.useEffect(() => {
+        if (filter == "") {
+            repPromise
+                .then(setReps)
+                .catch(err => console.error(err))
+        } else {
+            setReps(reps.filter(reps => reps.name.toUpperCase().includes(filter.toUpperCase())));
         }
     }, [filter])
-    
+
 
     const handleInput = (e) => {
         setFilter(e.target.value)
     }
-    
-    const debounceHandleInput = React.useMemo( () => 
-        debounce(handleInput,300),[]);
-    
+
+    const debounceHandleInput = React.useMemo(() =>
+        debounce(handleInput, 300), []);
+
 
 
     return (
         <Container className='animate__animated animate__fadeIn'>
             <Box className='as-content--search'>
-            <NavLink to="/">
-                <button className='as-btn--search'>
-                    <ArrowBackIcon/>
-                </button>
+                <NavLink to="/">
+                    <button className='as-btn--search'>
+                        <ArrowBackIcon />
+                    </button>
                 </NavLink>
-            
-            <Input className='as-input--search' placeholder='Buscar...' onChange={debounceHandleInput}>
-            </Input>
+
+                <Input className='as-input--search' placeholder='Buscar...' onChange={debounceHandleInput}>
+                </Input>
             </Box>
-            
+
             <List className='as-list'>
                 {(reps.length > 0)
-                ?
-                reps.map((rep, index) => (<Person {...rep} key={index} />))
-                :<p style={{color:'gray', textAlign:'center'}}>No se encontro información</p>
+                    ?
+                    reps.map((rep, index) => (<Person {...rep} key={index} />))
+                    : <p style={{ color: 'gray', textAlign: 'center' }}>No se encontro información</p>
                 }
             </List>
         </Container>
     );
 }
 
-export const Person = ({ name, date, deptName }) => {
+export const Person = ({ name, updatedAt, dependenciaName, leftAt }) => {
+    const date = new Date(updatedAt);
+    const dateLeft = new Date(leftAt);
     return (
         <>
             <ListItem alignItems="flex-start" className='as-listItem'>
@@ -83,9 +96,13 @@ export const Person = ({ name, date, deptName }) => {
                                 variant="body2"
                                 color="text.primary"
                             >
-                                {`Representante de: ${deptName}. Activo en la reunión desde`}
+                                {`En representación de: ${dependenciaName}. `}
+                                <br />
                             </Typography>
-                            {` — ${date}`}
+                            {` Entrada — ${date.toLocaleTimeString()}`}
+                            {
+                                leftAt ? `- Salida — ${dateLeft.toLocaleTimeString()}` : ' '
+                            }
                         </React.Fragment>
                     }
                 />
