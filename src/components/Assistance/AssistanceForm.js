@@ -126,8 +126,6 @@ export const AssistanceForm = () => {
 			{/* <Box className='form-header'>
 			</Box> */}
 			<Grid container className='form-title'>
-				<Button onClick={showPeople}>test</Button>
-				<Button onClick={killPeople}>kill</Button>
 				<Grid item xs={12} md={12} className='form-info'>
 					<h2>Registro de asistencia</h2>
 					<hr />
