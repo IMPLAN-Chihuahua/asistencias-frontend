@@ -3,7 +3,7 @@ import { Box } from '@mui/system'
 import React, { useEffect, useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { getDependencias, getRepresentantesFromDependencia } from '../../services/dependencias'
-import { joinRepresentante } from '../../services/representantes'
+import { checkInRepresentante, joinRepresentante, kickoutRepresentante } from '../../services/representantes'
 import './Assistance.css'
 import { getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
 import { StatusModal } from '../StatusModal/StatusModal'
@@ -18,6 +18,7 @@ export const AssistanceForm = () => {
 	const [assist, setAssist] = useState(false);
 	const [name, setName] = useState('');
 	const [dependencias, setDependencias] = useState(null);
+	const [retirement, setRetirement] = useState(false);
 
 	const [openModal, setOpenModal] = useState(false);
 	const [status, setStatus] = useState(false);
@@ -31,6 +32,7 @@ export const AssistanceForm = () => {
 	if (dependencias) {
 		depts = dependencias;
 	}
+
 	useEffect(() => {
 		if (selectedDept) {
 			getRepresentantesFromDependencia(selectedDept.id)
@@ -43,10 +45,11 @@ export const AssistanceForm = () => {
 		setSelectedRepresentative(null);
 		setSelectedDept(value);
 		if (value) {
-			if (value.hasRepresentative) {
-				setName(getRepresentativeThatIsOnReunion(value.id));
+			if (value.representante) {
+				setName(value.representante.name);
 				setAssist(true);
 			} else {
+				setName('');
 				setAssist(false);
 			}
 		}
@@ -58,19 +61,64 @@ export const AssistanceForm = () => {
 
 	const handleRetirement = () => {
 		setAssist(false);
-		setRepresentative(getRepresentativesFromDept(selectedDept.id));
+		setRetirement(true);
+	}
+
+	const showPeople = () => {
+		console.log('Representante que trae el selected dept');
+		console.log(selectedDept.representante.level);
+		console.log('representante que está en la reunión');
+		console.log(selectedRepresentative.level);
+	}
+
+	const killPeople = () => {
+		kickoutRepresentante(selectedDept.representante.id)
+			.then(() => {
+				setAssist(false);
+			})
+			.catch((err) => console.log(err));
 	}
 
 	const handleRegister = () => {
+		// selectedDept.representante.level > persona que está en la reunión
+		// selectedRepresentative.level > persona seleccionada por el usuario
+		if (retirement) {
+			if (selectedDept.representante.level < selectedRepresentative.level) {
+				checkInRepresentante(selectedRepresentative.id)
+					.then(() => {
+						setStatus(true);
+						setRetirement(false);
+						setOpenModal(true);
+					})
+					.catch((err) => console.log(err));
+			} else {
+				console.log('El que está adentro es menos importante');
+				kickoutRepresentante(selectedDept.representante.id)
+					.then(() => {
+						setAssist(false);
+						setRetirement(false);
+					})
+					.catch((err) => console.log(err));
+				register();
+			}
+		} else {
+			register();
+		}
+	};
+
+	const register = () => {
 		if (selectedDept && selectedRepresentative) {
 			joinRepresentante(selectedRepresentative.id)
-				.then(setOpenModal(true), setStatus(true))
+				.then(
+					setOpenModal(true),
+					setStatus(true),
+				)
 				.catch(err => console.error(err));
+			setRetirement(false);
 		} else {
 			setStatus(false);
 			setOpenModal(true);
 		}
-
 	};
 
 	return (
@@ -78,6 +126,8 @@ export const AssistanceForm = () => {
 			{/* <Box className='form-header'>
 			</Box> */}
 			<Grid container className='form-title'>
+				<Button onClick={showPeople}>test</Button>
+				<Button onClick={killPeople}>kill</Button>
 				<Grid item xs={12} md={12} className='form-info'>
 					<h2>Registro de asistencia</h2>
 					<hr />

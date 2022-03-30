@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const options = {
-    baseURL: 'https://asistencias-backend.herokuapp.com/api',
+    baseURL: 'http://localhost:8080/api',
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -9,8 +9,6 @@ const options = {
     timeout: 10000,
 };
 
+const localApi = axios.create(options);
 
-
-const publicApi = axios.create(options);
-
-export { publicApi, };
+export { localApi, };

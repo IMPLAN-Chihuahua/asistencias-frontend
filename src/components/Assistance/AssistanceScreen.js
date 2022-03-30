@@ -9,10 +9,10 @@ import Typography from '@mui/material/Typography';
 import PersonIcon from '@mui/icons-material/Person';
 import { getRepresentativesThatAreOnReunion } from './AssistanceList';
 import { Box, Button, Container, Input } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import debounce from 'lodash.debounce';
-
+import { useEffect } from 'react';
 
 import './Assistance.css'
 import { getRepresentantesThatCheckedIn } from '../../services/representantes';
@@ -49,16 +49,20 @@ export default function AssistanceScreen() {
     const debounceHandleInput = React.useMemo(() =>
         debounce(handleInput, 300), []);
 
-
+    useEffect(() => {
+        return () => {
+            debounceHandleInput.cancel();
+        }
+    }, []);
 
     return (
         <Container className='animate__animated animate__fadeIn'>
             <Box className='as-content--search'>
-                <NavLink to="/">
+                <Link to='/'>
                     <button className='as-btn--search'>
                         <ArrowBackIcon />
                     </button>
-                </NavLink>
+                </Link>
 
                 <Input className='as-input--search' placeholder='Buscar...' onChange={debounceHandleInput}>
                 </Input>
@@ -75,8 +79,8 @@ export default function AssistanceScreen() {
     );
 }
 
-export const Person = ({ name, updatedAt, dependenciaName, leftAt }) => {
-    const date = new Date(updatedAt);
+export const Person = ({ name, checkInDate, dependenciaName, leftAt }) => {
+    const date = new Date(checkInDate);
     const dateLeft = new Date(leftAt);
     return (
         <>
@@ -101,7 +105,7 @@ export const Person = ({ name, updatedAt, dependenciaName, leftAt }) => {
                             </Typography>
                             {` Entrada — ${date.toLocaleTimeString()}`}
                             {
-                                leftAt ? `- Salida — ${dateLeft.toLocaleTimeString()}` : ' '
+                                leftAt ? ` - Salida — ${dateLeft.toLocaleTimeString()}` : ' '
                             }
                         </React.Fragment>
                     }
