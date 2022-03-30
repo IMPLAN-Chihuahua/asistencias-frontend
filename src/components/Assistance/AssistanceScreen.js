@@ -18,11 +18,10 @@ import './Assistance.css'
 import { getRepresentantesThatCheckedIn } from '../../services/representantes';
 
 
+const repPromise = getRepresentantesThatCheckedIn().then(({ data }) => data);
 export default function AssistanceScreen() {
-    const repPromise = getRepresentantesThatCheckedIn().then(({ data }) => data);
 
-    const allReps = getRepresentativesThatAreOnReunion();
-    const [reps, setReps] = React.useState(getRepresentativesThatAreOnReunion())
+    const [reps, setReps] = React.useState({})
     const [filter, setFilter] = React.useState("")
 
     React.useEffect(() => {
