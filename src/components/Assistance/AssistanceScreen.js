@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import PersonIcon from '@mui/icons-material/Person';
 import { getRepresentativesThatAreOnReunion } from './AssistanceList';
 import { Box, Button, Container, Input } from '@mui/material';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import debounce from 'lodash.debounce';
 import { useEffect } from 'react';
@@ -18,10 +18,10 @@ import './Assistance.css'
 import { getRepresentantesThatCheckedIn } from '../../services/representantes';
 
 
-const repPromise = getRepresentantesThatCheckedIn().then(({ data }) => data);
 export default function AssistanceScreen() {
+    const repPromise = getRepresentantesThatCheckedIn().then(({ data }) => data);
 
-    const [reps, setReps] = React.useState({})
+    const [reps, setReps] = React.useState({ id: 1 })
     const [filter, setFilter] = React.useState("")
 
     React.useEffect(() => {
@@ -54,19 +54,18 @@ export default function AssistanceScreen() {
         }
     }, []);
 
+    const navigate = useNavigate();
 
-
-
+    const handleReturn = () => {
+        navigate('/', { replace: true })
+    }
 
     return (
         <Container className='animate__animated animate__fadeIn'>
             <Box className='as-content--search'>
-                <Link to='/'>
-                    <button className='as-btn--search'>
-                        <ArrowBackIcon />
-                    </button>
-                </Link>
-
+                <button className='as-btn--search' onClick={handleReturn}>
+                    <ArrowBackIcon />
+                </button>
                 <Input className='as-input--search' placeholder='Buscar...' onChange={debounceHandleInput}>
                 </Input>
             </Box>

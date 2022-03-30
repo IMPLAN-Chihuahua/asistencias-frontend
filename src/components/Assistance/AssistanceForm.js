@@ -8,9 +8,9 @@ import './Assistance.css'
 import { getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
 import { StatusModal } from '../StatusModal/StatusModal'
 
-const deptPromise = getDependencias().then(({ data }) => data);
 
 export const AssistanceForm = () => {
+	const deptPromise = getDependencias().then(({ data }) => data);
 	let depts = [{}];
 	const [selectedDept, setSelectedDept] = useState(null);
 	const [representatives, setRepresentative] = useState(null);
