@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Autocomplete, Button, Container, Grid, Link, TextField } from '@mui/material'
+import { Alert, AlertTitle, Autocomplete, Button, Container, FormControl, InputLabel, Grid, Select, MenuItem, Link, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useEffect, useMemo, useState } from 'react'
 import { NavLink } from 'react-router-dom'
@@ -8,13 +8,12 @@ import './Assistance.css'
 import { getRepresentativesFromDept, getRepresentativeThatIsOnReunion } from './AssistanceList'
 import { StatusModal } from '../StatusModal/StatusModal'
 
-
 export const AssistanceForm = () => {
 	const deptPromise = getDependencias().then(({ data }) => data);
 	let depts = [{}];
 	const [selectedDept, setSelectedDept] = useState(null);
 	const [representatives, setRepresentative] = useState(null);
-	const [selectedRepresentative, setSelectedRepresentative] = useState(null);
+	const [selectedRepresentative, setSelectedRepresentative] = useState('');
 	const [assist, setAssist] = useState(false);
 	const [name, setName] = useState('');
 	const [dependencias, setDependencias] = useState(null);
@@ -57,6 +56,10 @@ export const AssistanceForm = () => {
 
 	const handleRepChange = (value) => {
 		setSelectedRepresentative(value);
+	}
+
+	const handleSelectChange = (e) => {
+		setSelectedRepresentative(e.target.value);
 	}
 
 	const handleRetirement = () => {
@@ -139,9 +142,8 @@ export const AssistanceForm = () => {
 								options={depts}
 								className='form-selector animate__animated animate__fadeInDown'
 								fullWidth
-								size='small'
 								renderInput={params => (
-									<TextField {...params} label="Departamento" variant="outlined" fullWidth size='small' className='animate__animated animate__fadeInDown' />
+									<TextField {...params} label="Departamento" variant="outlined" fullWidth size='medium' className='animate__animated animate__fadeInDown' />
 								)}
 								getOptionLabel={option => option.name}
 								value={selectedDept}
@@ -149,19 +151,39 @@ export const AssistanceForm = () => {
 							/>
 							{
 								representatives && !assist &&
-								<Autocomplete
-									id="reps"
-									options={representatives}
-									className='form-selector animate__animated animate__fadeInDown'
-									fullWidth
-									size='small'
-									renderInput={params => (
-										<TextField {...params} label="Representantes del departamento" variant="outlined" fullWidth />
-									)}
-									getOptionLabel={option => option.name}
-									value={selectedRepresentative}
-									onChange={(e, newRep) => handleRepChange(newRep)}
-								/>
+								<>
+									<FormControl fullWidth className='animate__animated animate__fadeInDown' sx={{ height: '50 %' }}>
+										<InputLabel id="representantesTag" sx={{}}>Representante</InputLabel>
+										<Select
+											labelId="representantes"
+											id='representantesSelect'
+											label='Representante'
+											onChange={handleSelectChange}
+											className='form-selector'
+											value={selectedRepresentative ? selectedRepresentative : ''}
+										>
+											{
+												representatives.map(params => (
+													<MenuItem key={params.id} value={params}>{params.name}</MenuItem>
+												))
+											}
+										</Select>
+									</FormControl>
+									{/* 
+									<Autocomplete
+										id="reps"
+										options={representatives}
+										className='form-selector animate__animated animate__fadeInDown'
+										fullWidth
+										size='small'
+										renderInput={params => (
+											<TextField {...params} label="Representantes del departamento" variant="outlined" fullWidth />
+										)}
+										getOptionLabel={option => option.name}
+										value={selectedRepresentative}
+										onChange={(e, newRep) => handleRepChange(newRep)}
+									/> */}
+								</>
 								||
 								assist &&
 								(
